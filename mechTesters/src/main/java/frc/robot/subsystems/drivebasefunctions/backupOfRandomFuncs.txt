@@ -1,0 +1,394 @@
+	public void goInchesGyroPieceWise(double input){
+		double curTar = leftMast.getSelectedSensorPosition(0);
+		double targetTicks =mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		double gyroTarget = ahrs.getAngle();
+		Timer.delay(1);
+		while(curTar < targetTicks){
+			goInchesEncoderOnly(20);
+			Timer.delay(2);
+			turnDegreesGyro(gyroTarget);
+			curTar = leftMast.getSelectedSensorPosition(0);
+		}
+		// leftMast.set(ControlMode.MotionMagic, inches-curInches);
+		// rightMast.set(ControlMode.MotionMagic, inches-curInches);
+		// Timer.delay(1.55);
+		// turnDegreesGyro(gyroTarget - ahrs.getAngle());
+		// gyroTurnController.setAbsoluteTolerance(.5);
+	}
+
+	public void goInchesV1(double input) {
+		System.out.println(ahrs.getAngle());
+		double leftSet = mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		
+		SmartDashboard.putNumber("leftSet", leftSet);
+		// leftMast.set(ControlMode.Position, leftSet);
+		// rightMast.set(ControlMode.Position, leftSet);
+
+		leftMast.set(ControlMode.MotionMagic, leftSet);
+		rightMast.set(ControlMode.MotionMagic, leftSet);
+		
+	}
+
+	public void goInchesGyroV4(double inches){
+		double curInches = 0;
+		double gyroTarget = ahrs.getAngle();
+		Timer.delay(1);
+		while(curInches < inches){
+			goInchesEncoderOnly(20);
+			Timer.delay(.5);
+			turnDegreesGyro(gyroTarget);
+			curInches = curInches + 10;
+		}
+		// leftMast.set(ControlMode.MotionMagic, inches-curInches);
+		// rightMast.set(ControlMode.MotionMagic, inches-curInches);
+		// Timer.delay(1.55);
+		// turnDegreesGyro(gyroTarget - ahrs.getAngle());
+		// gyroTurnController.setAbsoluteTolerance(.5);
+	}
+
+	public void goInchesGyroV2(double input){
+		double targetTicks =mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		System.out.println(targetTicks);
+		double curTar = leftMast.getSelectedSensorPosition(0) + 5000;
+		double gyroTarget = ahrs.getAngle();
+		while(curTar < targetTicks){
+			gyroTurnController.setAbsoluteTolerance(5);
+			goInchesEncoderOnly(5);
+			System.out.println(curTar + "||" + leftMast.getSelectedSensorPosition(0));
+			Timer.delay(1.5);
+			turnDegreesGyro(gyroTarget - ahrs.getAngle());
+			curTar = ((leftMast.getSelectedSensorPosition(0) + rightMast.getSelectedSensorPosition(0))/2) 
+					+ 5000;
+		}
+		leftMast.set(ControlMode.MotionMagic, targetTicks);
+		rightMast.set(ControlMode.MotionMagic, targetTicks);
+		Timer.delay(1.55);
+		turnDegreesGyro(gyroTarget - ahrs.getAngle());
+		gyroTurnController.setAbsoluteTolerance(.5);
+	}
+	public void goInchesGyroV1(double input){
+		double targetTicks = mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		System.out.println(targetTicks);
+		double curTar = leftMast.getSelectedSensorPosition(0) + 5000;
+		double gyroTarget = ahrs.getAngle();
+		while(curTar < targetTicks){
+			gyroTurnController.setAbsoluteTolerance(5);
+			leftMast.set(ControlMode.MotionMagic, curTar);
+			rightMast.set(ControlMode.MotionMagic, curTar);
+			System.out.println(curTar + "||" + leftMast.getSelectedSensorPosition(0));
+			Timer.delay(1.5);
+			turnDegreesGyro(gyroTarget - ahrs.getAngle());
+			curTar = curTar + 5000;
+		}
+		leftMast.set(ControlMode.MotionMagic, targetTicks);
+		rightMast.set(ControlMode.MotionMagic, targetTicks);
+		Timer.delay(1.5);
+		turnDegreesGyro(gyroTarget - ahrs.getAngle());
+		gyroTurnController.setAbsoluteTolerance(.5);
+	}
+
+	public void setRPM(double leftRPM, double rightRPM) {
+		leftMast.set(ControlMode.Velocity, mathFuncs.RpmToUnitsPer100Ms(leftRPM));
+		rightMast.set(ControlMode.Velocity, mathFuncs.RpmToUnitsPer100Ms(rightRPM));
+		// System.out.println("left tickset: " + RpmToUnitsPer100Ms(leftRPM) +  "|| left encoder " + leftMast.getSelectedSensorVelocity(0));
+		// System.out.println("right tickset: " + RpmToUnitsPer100Ms(rightRPM) +  "|| right encoder " + rightMast.getSelectedSensorVelocity(0));
+	}
+	
+	public void setMPH(double leftMPH, double rightMPH) {
+		leftMast.set(ControlMode.Velocity, mathFuncs.RpmToUnitsPer100Ms(leftMPH));
+		rightMast.set(ControlMode.Velocity, mathFuncs.RpmToUnitsPer100Ms(rightMPH));
+	}
+
+	public void FASTgoInchesTestingBack(double input) {
+		System.out.println("Starting to go Straight!");
+		//get our starting postion
+		double heading = ahrs.getAngle();
+		//wait a second
+		Timer.delay(.1);
+		//print it out
+		System.out.println("Initial Heading Gyro reads:" + ahrs.getAngle());
+		
+		//get our left and right target
+		double leftSet = mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		double rightSet = mathFuncs.inchesToTicks(input) + rightMast.getSelectedSensorPosition(0);
+		
+		//get our starting encoder postion
+		double leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+		//set left and right target
+		leftMast.set(ControlMode.MotionMagic, leftSet);
+		rightMast.set(ControlMode.MotionMagic, rightSet);
+
+		//init accumilation and error value 
+		double gyroAcc = 0;
+		double error =0;
+		double previousError = 0;
+		double curDev = 0;
+		double sumDev = 0;
+
+		//create array of last twity dertives
+		double[] lastTwenty = new double[20];
+		//create second arry for tempaory use
+		double[] lastTwentyShifted = new double[20];
+
+		//intialize the array to all 0
+		for(int i = 0; i<20; i++){
+			lastTwenty[i] = 0;
+		}
+		
+		//loop for while we are moving
+		while(leftCurrent > leftSet + 100){
+			//save our old error
+			previousError = error;
+			//get our new error
+			error = (heading-ahrs.getAngle());
+			//get our change in error
+			curDev = error - previousError;
+			
+			//shift over the last 19 values, thorwing out the last one
+			for(int i =0; i<19; i++){
+				lastTwentyShifted[i+1] = lastTwenty[i];
+			}
+			//make the arry equal to the shifted one
+			for(int i =0; i<20; i++){
+				lastTwenty[i] = lastTwentyShifted[i];
+			}
+			//add in the new error for this one
+			lastTwenty[0] =curDev;
+			//sum the error over the last tewnty
+			for(int i =0; i<20; i++){
+				sumDev = sumDev+ lastTwenty[i];
+			}
+			
+	
+			//get our linaer term
+			double gyroError = Constants.gyroCorP*error;
+
+			//print out the drivte and linear term
+			// System.out.println(sumDev + "||" + gyroError);
+
+			//add up error over time
+			gyroAcc = gyroAcc + error;
+
+			//mulitple aculltion error by a constant
+			double gyroAccScaled = gyroAcc * Constants.gyroCorI;
+
+			//scale the dervtive
+			double sumDevScaled = sumDev * Constants.gyroCorD;
+
+			//add up the gyro correction factor
+			double gyroCorFact = gyroError + gyroAccScaled + sumDevScaled;
+
+			//make P more senstive on the side that is dragging
+			setPIDFL(Constants.driveP + gyroCorFact, Constants.driveI, Constants.driveD, Constants.driveF);
+			setPIDFR(Constants.driveP - gyroCorFact, Constants.driveI, Constants.driveD, Constants.driveF);
+			
+			//see how far along we are
+			leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+			//sanity check if we are over 5 degrees off
+			if (error > 5 || error < -5){
+				System.out.println("I e-stopped since i am more than 5 degress off");
+				break;
+			}
+		}
+
+
+		//stop the motors
+		leftMast.set(ControlMode.PercentOutput, 0);
+		rightMast.set(ControlMode.PercentOutput, 0);
+
+		//reset PID coefferints
+		setPIDFL(Constants.driveP, Constants.driveI, Constants.driveD, Constants.driveF);
+		setPIDFR(Constants.driveP, Constants.driveI, Constants.driveD, Constants.driveF);
+		
+		// //tells us we stopped
+		// Timer.delay(.1);
+		// System.out.println("I stopped driving, I am off by:" + (heading-ahrs.getAngle()));
+		// Timer.delay(.25);
+		// System.out.println("final gyro reading:" + ahrs.getAngle());
+	}
+
+	public void goInchesTestingV1(double input) {
+		
+		double heading = ahrs.getAngle();
+		Timer.delay(1);
+		System.out.println("Initial Heading Gyro reads:" + ahrs.getAngle());
+		
+		double leftSet = mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		double rightSet = mathFuncs.inchesToTicks(input) + rightMast.getSelectedSensorPosition(0);
+		
+		double leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+		leftMast.set(ControlMode.MotionMagic, leftSet);
+		rightMast.set(ControlMode.MotionMagic, rightSet);
+		
+		while(leftCurrent < leftSet - 100){
+
+			double gyroError = .15*(heading-ahrs.getAngle());
+
+			setPIDFL(Constants.driveP + gyroError, Constants.driveI, Constants.driveD, Constants.driveF);
+			setPIDFR(Constants.driveP - gyroError, Constants.driveI, Constants.driveD, Constants.driveF);
+			
+			leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+			if (gyroError > 5 || gyroError < -5){
+			break;
+			}
+		}
+		leftMast.set(ControlMode.PercentOutput, 0);
+		rightMast.set(ControlMode.PercentOutput, 0);
+		System.out.println("I stopped driving. Gyro reads:" + ahrs.getAngle());
+	}
+
+	public void relativeTurnGyro(double deg){
+
+		double relDegree = ahrs.getAngle() + deg;
+
+		gyroTurnController.enable(); //turn it on
+		gyroTurnController.setSetpoint(relDegree); //set the target
+		//gyroTurnController.setPercentTolerance(2); //Set the percentage error which is considered tolerable for use with OnTarget.
+		//Set the absolute error which is considered tolerable for use with OnTarget.
+		
+
+		double slower = .25;
+
+		leftMast.set(ControlMode.PercentOutput, gyroTurnController.get()*slower);
+		rightMast.set(ControlMode.PercentOutput, -gyroTurnController.get()*slower);
+
+		Timer.delay(.1);
+
+		while(gyroTurnController.onTarget() != true){
+			// System.out.println(ahrs.getAngle() + "||" + gyroTurnSpeed*slower);
+			leftMast.set(ControlMode.PercentOutput, gyroTurnController.get()*slower);
+			rightMast.set(ControlMode.PercentOutput, -gyroTurnController.get()*slower);
+		}
+
+		leftMast.set(ControlMode.PercentOutput, 0);
+		rightMast.set(ControlMode.PercentOutput, 0);
+		System.out.println("im done, gyro reads:" + ahrs.getAngle());
+		System.out.println("error is reads:" + (relDegree-ahrs.getAngle()));
+
+	}
+
+	
+	
+	public void FASTturnAbsoluteDegreesGyro(double deg){
+		turn.FASTturnAbsoluteDegreesGyro(deg, gyroTurnController, ahrs, leftMast, rightMast);
+	}
+
+	
+	public void goRevs(double leftRevs, double rightRevs) {
+		straight.goRevs(leftRevs, rightRevs, leftMast, rightMast);
+	}
+	
+	
+	public void goRevsReset() {
+		
+		double leftSet =leftMast.getSelectedSensorPosition(0);
+		double rightSet =rightMast.getSelectedSensorPosition(0);
+		
+		SmartDashboard.putNumber("leftSet", leftSet);
+		
+		leftMast.set(ControlMode.Position, leftSet);
+		rightMast.set(ControlMode.Position, rightSet);
+	}
+
+	public void FASTgoInchesTesting(double input) {
+		System.out.println("Starting to go Straight!");
+		//get our starting postion
+		double heading = ahrs.getAngle();
+		//wait a second
+		Timer.delay(.1);
+		//print it out
+		System.out.println("Initial Heading Gyro reads:" + ahrs.getAngle());
+		
+		//get our left and right target
+		double leftSet = mathFuncs.inchesToTicks(input) + leftMast.getSelectedSensorPosition(0);
+		double rightSet = mathFuncs.inchesToTicks(input) + rightMast.getSelectedSensorPosition(0);
+		
+		//get our starting encoder postion
+		double leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+		//set left and right target
+		leftMast.set(ControlMode.MotionMagic, leftSet);
+		rightMast.set(ControlMode.MotionMagic, rightSet);
+
+		//init accumilation and error value 
+		double gyroAcc = 0;
+		double error =0;
+		double previousError = 0;
+		double curDev = 0;
+		double sumDev = 0;
+
+		//create array of last twity dertives
+		double[] lastTwenty = new double[20];
+		//create second arry for tempaory use
+		double[] lastTwentyShifted = new double[20];
+
+		//intialize the array to all 0
+		for(int i = 0; i<20; i++){
+			lastTwenty[i] = 0;
+		}
+		
+		//loop for while we are moving
+		while(leftCurrent < leftSet - 100){
+			//save our old error
+			previousError = error;
+			//get our new error
+			error = (heading-ahrs.getAngle());
+			//get our change in error
+			curDev = error - previousError;
+			
+			//shift over the last 19 values, thorwing out the last one
+			for(int i =0; i<19; i++){
+				lastTwentyShifted[i+1] = lastTwenty[i];
+			}
+			//make the arry equal to the shifted one
+			for(int i =0; i<20; i++){
+				lastTwenty[i] = lastTwentyShifted[i];
+			}
+			//add in the new error for this one
+			lastTwenty[0] =curDev;
+			//sum the error over the last tewnty
+			for(int i =0; i<20; i++){
+				sumDev = sumDev+ lastTwenty[i];
+			}
+			
+	
+			//get our linaer term
+			double gyroError = Constants.gyroCorP*error;
+
+			//print out the drivte and linear term
+			// System.out.println(sumDev + "||" + gyroError);
+
+			//add up error over time
+			gyroAcc = gyroAcc + error;
+
+			//mulitple aculltion error by a constant
+			double gyroAccScaled = gyroAcc * Constants.gyroCorI;
+
+			//scale the dervtive
+			double sumDevScaled = sumDev * Constants.gyroCorD;
+
+			//add up the gyro correction factor
+			double gyroCorFact = gyroError + gyroAccScaled + sumDevScaled;
+
+			//make P more senstive on the side that is dragging
+			setPIDFLeftSide(Constants.driveP + gyroCorFact, Constants.driveI, Constants.driveD, Constants.driveF);
+			setPIDFRightSide(Constants.driveP - gyroCorFact, Constants.driveI, Constants.driveD, Constants.driveF);
+			
+			//see how far along we are
+			leftCurrent = leftMast.getSelectedSensorPosition(0);
+
+			//sanity check if we are over 5 degrees off
+			if (error > 5 || error < -5){
+				System.out.println("I e-stopped since i am more than 5 degress off");
+				break;
+			}
+		}
+	}
+
+	
+
+    
