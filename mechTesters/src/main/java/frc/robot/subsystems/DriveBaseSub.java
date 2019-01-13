@@ -7,6 +7,7 @@ import frc.robot.commands.manualMode;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -32,6 +33,8 @@ public class DriveBaseSub extends Subsystem implements PIDOutput{
 	private VictorSPX rightFol;
 	public TalonSRX leftMast;
 	public TalonSRX rightMast;
+
+	public TalonSRX henrysTalon;
 	
 	public AHRS ahrs;
 
@@ -48,6 +51,14 @@ public class DriveBaseSub extends Subsystem implements PIDOutput{
 		rightFol = new VictorSPX(RobotMap.RIGHTFOL.value);
 		leftMast = new TalonSRX(RobotMap.LEFTTAL.value);
 		rightMast = new TalonSRX(RobotMap.RIGHTTAL.value);
+		henrysTalon = new TalonSRX(15);
+
+		henrysTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0 ,0);
+		henrysTalon.config_kP(0, 0.7);
+		henrysTalon.config_kI(0, 0.001);
+		henrysTalon.config_kD(0, 0.7);
+		henrysTalon.setInverted(true);
+		henrysTalon.setSensorPhase(true);
 
 		//basic init of all motors
 		initVictor(leftFol);
@@ -157,8 +168,8 @@ public class DriveBaseSub extends Subsystem implements PIDOutput{
 	@Override
 	protected void initDefaultCommand() {
 		//runs arcade drive
-		setDefaultCommand(new manualMode()); //For Drvier
-		// setDefaultCommand(new codeTest()); //for programmer
+		// setDefaultCommand(new manualMode()); //For Drvier
+		setDefaultCommand(new codeTest()); //for programmer
 
 	}
 

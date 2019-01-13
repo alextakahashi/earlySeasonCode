@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class codeTest extends Command {
 
 	VictorSPX mechis = new VictorSPX(11);
+	VictorSPX intake = new VictorSPX(12);
 
 	public codeTest() {
 		requires(Robot.DriveBaseSub);
@@ -74,11 +75,24 @@ public class codeTest extends Command {
 
 
 		if(Robot.oi.getOneX()) {
-			mechis.set(ControlMode.PercentOutput, 0);
+			// mechis.set(ControlMode.PercentOutput, 0);
+			// intake.set(ControlMode.PercentOutput, 0);
+
+
+			
+			Robot.DriveBaseSub.henrysTalon.set(ControlMode.Position, -5000);
+
 			
 		}
+
 		if(Robot.oi.getOneA()) {
-			mechis.set(ControlMode.PercentOutput, 1);
+			// mechis.set(ControlMode.PercentOutput, 1);
+			// intake.set(ControlMode.PercentOutput, -1);
+
+
+			System.out.println(Robot.DriveBaseSub.henrysTalon.getSelectedSensorPosition(0));
+
+
 		}
 
 
@@ -87,7 +101,11 @@ public class codeTest extends Command {
 		}
 
 		if(Robot.oi.getOneB()){
-			mechis.set(ControlMode.PercentOutput, -1);
+			// mechis.set(ControlMode.PercentOutput, -1);
+			// intake.set(ControlMode.PercentOutput, 1);
+
+
+			Robot.DriveBaseSub.henrysTalon.set(ControlMode.Position, 5000);
 		}
 
 		if(Robot.oi.getTwoA()){
