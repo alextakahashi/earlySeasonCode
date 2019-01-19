@@ -2,6 +2,11 @@ package frc.robot.subsystems.drivebasefunctions;
 
 public class straightConstants{
 
+	/*
+	* top speed- joystick will express percent of this
+	* the therotical top speed is 8.9 but im playing on the safe side here
+	* also will mean we can drive stragin even if one motor is jammed
+	*/
 
     //78.7402 inches per sec -> 13.1233666667 revs/sec -> 53753 ticks/sec -> 5375 ticks/100ms
 	public static double driveMaxSpeed = 2; // .25 is working value for slow

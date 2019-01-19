@@ -42,13 +42,15 @@ public class manualMode extends Command {
 		 * gets the y from the left and turning from the right, normal aracde drive
 		 * then makes the whole thing on a cubic function to give driver finer control in low power
 		 */
-		double leftPercent = Robot.oi.getOneLeftY();
-    double rightPercent = Robot.oi.getOneRightY();
+		double leftPercent = -Robot.oi.getOneRightY();
+	double rightPercent = -Robot.oi.getOneLeftY();
+	
+	SmartDashboard.putNumber("left", leftPercent);
     
     
 		
     Robot.DriveBaseSub.set(ControlMode.PercentOutput, 
-      -speedCoeff*leftPercent, speedCoeff*rightPercent);
+      speedCoeff*leftPercent, -speedCoeff*rightPercent);
 
 
 		
