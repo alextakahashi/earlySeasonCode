@@ -168,7 +168,7 @@ public class DriveBaseSub extends Subsystem implements PIDOutput{
 	@Override
 	protected void initDefaultCommand() {
 		//runs arcade drive
-		// setDefaultCommand(new manualMode()); //For Drvier
+		//setDefaultCommand(new manualMode()); //For Drvier
 		setDefaultCommand(new codeTest()); //for programmer
 
 	}

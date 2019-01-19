@@ -8,6 +8,7 @@
 package frc.robot;
 
 import frc.robot.commands.codeTest;
+import frc.robot.commands.manualMode;
 import frc.robot.commands.autoCircle;
 import frc.robot.subsystems.DriveBaseSub;
 
@@ -23,7 +24,7 @@ public class Robot extends TimedRobot {
 	Command testmode;
 	public static OI oi;
 	public static DriveBaseSub DriveBaseSub;
-	public static codeTest arcDrive;
+	public static manualMode arcDrive;
 	
 	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 	NetworkTableEntry tx = table.getEntry("tx");
