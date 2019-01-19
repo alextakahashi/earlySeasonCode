@@ -14,25 +14,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class codeTest extends Command {
+public class CodeTest extends Command {
 
 	//VictorSPX mechis = new VictorSPX(11);
 	VictorSPX intake = new VictorSPX(12);
 
-	public codeTest() {
+	public CodeTest() {
 		requires(Robot.DriveBaseSub);
 	}
 	
 	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 	NetworkTableEntry tx = table.getEntry("tx");
 	NetworkTableEntry ty = table.getEntry("ty");
-
-
-	
-	// private double speedMultiplier = 1;
-	// private double maxMPH = 8 /*top speed- joystick will express percent of this
-	 							// the therotical top speed is 8.9 but im playing on the safe side here
-	 							// also will mean we can drive stragin even if one motor is jammed*/;
 
 	protected void initialize() {
 
@@ -122,6 +115,7 @@ public class codeTest extends Command {
 
 
 			//Robot.DriveBaseSub.henrysTalon.set(ControlMode.Position, 5000);
+
 		}
 
 		if(Robot.oi.getTwoA()){

@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class autoCircle extends CommandGroup {
+public class AutoCircle extends CommandGroup {
 
-    public autoCircle() {
+    public AutoCircle() {
         requires(Robot.DriveBaseSub);
         addSequential(new goForward());
     	//addSequential(new pathedRobot());

@@ -7,9 +7,9 @@
 
 package frc.robot;
 
-import frc.robot.commands.codeTest;
+import frc.robot.commands.CodeTest;
 import frc.robot.commands.manualMode;
-import frc.robot.commands.autoCircle;
+import frc.robot.commands.AutoCircle;
 import frc.robot.subsystems.DriveBaseSub;
 
 
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 		oi = new OI();
 		DriveBaseSub = new DriveBaseSub();
 		// chooser.addObject("My Auto", new MyAutoCommand());
-		autoCircle = new autoCircle();
+		autoCircle = new AutoCircle();
 
 		
 	}

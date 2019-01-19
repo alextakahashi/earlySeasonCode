@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.RobotMap;
-import frc.robot.commands.codeTest;
+import frc.robot.commands.CodeTest;
 import frc.robot.commands.manualMode;
 
 
@@ -169,7 +169,7 @@ public class DriveBaseSub extends Subsystem implements PIDOutput{
 	protected void initDefaultCommand() {
 		//runs arcade drive
 		//setDefaultCommand(new manualMode()); //For Drvier
-		setDefaultCommand(new codeTest()); //for programmer
+		setDefaultCommand(new CodeTest()); //for programmer
 
 	}
 
